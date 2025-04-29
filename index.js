@@ -1,25 +1,28 @@
-const express = require("express")
+const express = require("express");
+const userRouter = require("./routes/user.router");
+const connectDB = require("./connection");
+const cookieParser = require("cookie-parser");
+const staticRouter = require("./routes/static.router");
 const path = require("path");
-const router = require("./routes/user");
-const cookieParser = require("cookie-parser")
-const connectDB = require("./connection/connection");
-const { checkForAuthenticaionCookies } = require("./middlware/authentication");
+const blogRouter = require("./routes/blog.router");
+const app = express()
 
+const PORT = 8000;
+const MONGO_URL = "mongodb://localhost:27017/blog"
 
+connectDB(MONGO_URL).then(()=>console.log("Database connected")).catch((error)=>console.log("Mongo Error :",error))
 
-const app = express();
-PORT = 8000;
-URL = "mongodb://localhost:27017/blog"
-connectDB(URL).then().catch((error) => { console.log("Mongo error : ", error) })
-app.use(express.urlencoded({ extended: false }))
-app.use(express.static(path.resolve("./public")))
+app.use(express.urlencoded({extended:true}))
 app.use(express.json())
 app.use(cookieParser())
-app.use(checkForAuthenticaionCookies())
 
 app.set('view engine', 'ejs')
 app.set('views', path.resolve("./views"))
 
-app.use("/", router)
+app.use("/user",userRouter)
+app.use("/",staticRouter)
+app.use("/blog",blogRouter)
 
-app.listen(PORT, () => { console.log("Server started at port " + PORT) })
+app.listen(PORT,()=>{
+    console.log(`Server started at PORT ${PORT}`)
+})

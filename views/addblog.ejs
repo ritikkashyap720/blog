@@ -2,33 +2,67 @@
 <html lang="en">
 
 <head>
-    <%- include("./partials/head") %>
-        <title>Home</title>
-
+    <meta charset="UTF-8">
+    <title>Add Blog - Blogify</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body>
-    <%- include("./partials/navbar") %>
+<body class="bg-gradient-to-br from-gray-100 to-white text-gray-800 min-h-screen flex flex-col">
 
-        <%= JSON.stringify(user) %>
-            <div class="container">
-                <form action="/addblog" method="post" enctype="multipart/form-data" >
-                    <div class="mb-3">
-                        <label for="coverImageURL" class="form-label">Choose you cover image for your blog</label>
-                        <input class="form-control" type="file" id="coverImageURL" name="coverImageURL" required>
+    <!-- Navbar -->
+    <nav class="bg-white shadow-sm sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="/" class="text-2xl font-bold text-indigo-600 hover:text-indigo-700 transition">Blogify</a>
+            <div>
+                <% if (user) { %>
+                    <a href="/logout"
+                        class="text-sm text-gray-700 hover:cursor-pointer mx-2 bg-red-600 text-white py-2.5 px-4 rounded">Logout</a>
+                    <% } else { %>
+                        <a href="/login" class="text-sm text-gray-700 hover:text-indigo-600 mx-2">Login</a>
+                        <a href="/signup" class="text-sm text-gray-700 hover:text-indigo-600 mx-2">Sign Up</a>
+                        <% } %>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+        <section class="max-w-3xl mx-auto px-4 py-12">
+            <div class="bg-white shadow-md rounded-lg p-8">
+                <h1 class="text-3xl font-bold text-center text-indigo-700 mb-8">Create a New Blog Post</h1>
+
+                <form action="/blog/addBlog" method="POST" class="space-y-6">
+                    <!-- Title Field -->
+                    <div>
+                        <label for="title" class="block text-sm font-semibold text-gray-700 mb-1">Title</label>
+                        <input type="text" name="title" id="title" required placeholder="Enter a captivating title"
+                            class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition">
                     </div>
-                    <div class="mb-3">
-                        <label for="title" class="form-label">Title</label>
-                        <input type="text" class="form-control" id="title" name="title" required>
+
+                    <!-- Body Field -->
+                    <div>
+                        <label for="body" class="block text-sm font-semibold text-gray-700 mb-1">Body</label>
+                        <textarea name="body" id="body" rows="10" required placeholder="Start writing your thoughts..."
+                            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition resize-none"></textarea>
                     </div>
-                    <div class="mb-3">
-                        <label for="body" class="form-label">Write your blog content</label>
-                        <textarea class="form-control" id="body" rows="6" name="body" required></textarea>
+
+                    <!-- Submit Button -->
+                    <div class="text-center">
+                        <button type="submit"
+                            class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-2 rounded-lg transition duration-300">
+                            Publish Blog
+                        </button>
                     </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
             </div>
-            <%- include("./partials/scripts") %>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white text-center text-sm text-gray-500 py-4 border-t">
+        © 2025 Blogify. All rights reserved.
+    </footer>
 </body>
 
 </html>

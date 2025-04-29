@@ -1,36 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <%- include("./partials/head") %>
-        <title>Login</title>
-
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-
-<body>
-    <%- include("./partials/navbar") %>
-    <div class="container my-3">
-        <h1>Login</h1>
-        <% if(locals.result){%>
-            <div class="alert alert-danger" role="alert">
-               <%= locals.result.error %>  
-              </div>
-        <% } %>
-        <form action="/login" method="post" class="my-3">
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Email address</label>
-                <input type="email" class="form-control" name="email" id="exampleInputEmail1"
-                    aria-describedby="emailHelp" required>
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Password</label>
-                <input type="password" class="form-control" name="password" id="exampleInputPassword1" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+<body class="bg-gradient-to-r from-purple-500 to-indigo-600 min-h-screen flex items-center justify-center px-4">
+  <div class="bg-white max-w-md w-full rounded-xl shadow-lg p-8 sm:p-10 space-y-6">
+    <div class="text-center">
+      <h2 class="text-3xl font-extrabold text-gray-800">Welcome Back</h2>
+      <p class="mt-2 text-sm text-gray-500">Login to your account</p>
     </div>
 
-    <%- include("./partials/scripts") %>
-</body>
+    <form action="/user/login" method="POST" class="space-y-5">
+      <!-- Email -->
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+        <div class="relative">
+          <input type="email" id="email" name="email" required
+                 class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none transition">
+          <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"
+                 viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round"
+                 d="M16 12H8m0 0l4-4m0 8l-4-4" /></svg>
+          </div>
+        </div>
+      </div>
 
+      <!-- Password -->
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+        <div class="relative">
+          <input type="password" id="password" name="password" required
+                 class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none transition">
+          <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"
+                 viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round"
+                 d="M12 11c0-1.657-1.343-3-3-3s-3 1.343-3 3m6 0c0 1.657 1.343 3 3 3s3-1.343 3-3m-6 0v6m0-6H6" /></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <div>
+        <button type="submit"
+                class="w-full bg-indigo-600 text-white font-medium py-2 px-4 rounded-md hover:bg-indigo-700 transition duration-200">
+          Login
+        </button>
+      </div>
+    </form>
+
+    <p class="text-sm text-center text-gray-500">
+      Don't have an account?
+      <a href="/signup" class="text-indigo-600 hover:underline">Sign up</a>
+    </p>
+  </div>
+</body>
 </html>
