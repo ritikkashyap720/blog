@@ -15,16 +15,17 @@ async function restrictNotLoginedUsers(req, res, next) {
 
 async function checkAuthToken(req,res,next) {
     const cookie = req.cookies.token;
+   
     if (cookie) {
         try {
             const user  = await verifyToken(cookie)
             req.user = user
             next()
         } catch (error) {
-            next(error)
+            console.log(error)
+            next()
         }
-    }
-    next();    
+    }   
 
 }
 

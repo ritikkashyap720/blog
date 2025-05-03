@@ -7,11 +7,12 @@ async function addBlog(req, res) {
 
     if (title && body && user) {
         const blog = await Blog.create({ title, body, createdBy: user._id ,blogId: uniqid.time()})
-        console.log(blog)
-
+        res.render("addblog",{blog,user:req.user})
     } else {
-        res.render("/addBlog", { error: "All fields are required" })
+        res.render("addblog", {user:req.user, error: "All fields are required" })
     }
 }
+
+
 
 module.exports = { addBlog }

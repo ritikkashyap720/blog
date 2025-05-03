@@ -7,19 +7,19 @@ async function handleSignup(req, res) {
     
     if (name && email && password) {
         const userExist = await User.findOne({ email })
-        if (userExist) return res.json({ error: "Email already exist" })
+        if (userExist) return res.render("signup",{ error: "Email already exist" })
 
         try {
             const user = await User.create({ name, email, password })
             const token = await createToken({ name: user.name, email: user.email, _id: user._id })
-            res.status(200).json(token)
+            res.cookie('token', token).redirect("/")
 
         } catch (error) {
-            res.status(401).json({ error: "Error creating user" })
+            res.status(401).render("signup",{ error: "Error creating user" })
             console.log(error)
         }
     } else {
-        res.status(401).json({ error: "All field are required" })
+        res.status(401).render("signup",{ error: "All field are required" })
     }
 }
 
@@ -35,16 +35,16 @@ async function handleLogin(req, res) {
                     const token = await createToken({ name: user.name, email: user.email, _id: user._id })
                     res.cookie('token', token).redirect("/")
                 } else {
-                    res.status(401).json({ error: "Incorrect email or password" })
+                    res.status(401).render("login",{ error: "Incorrect email or password" })
                 }
             } else {
-                res.status(401).json({ error: "Incorrect email or password" })
+                res.status(401).render("login",{ error: "Incorrect email or password" })
             }
         } catch (error) {
-            res.status(401).json({ error: "Incorrect email or password" })
+            res.status(401).render("login",{ error: "Incorrect email or password" })
         }
     } else {
-        res.status(401).json({ error: "All field are required" })
+        res.status(401).render("login",{ error: "All field are required" })
     }
 }
 

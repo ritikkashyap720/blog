@@ -55,7 +55,9 @@
           </div>
         </div>
       </div>
-
+      <% if (error!=null) { %>
+      <p class="text-red-600 text-center"><%= error %></p>
+      <% } %>
       <!-- Submit -->
       <div>
         <button type="submit"
