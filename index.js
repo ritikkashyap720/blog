@@ -7,7 +7,7 @@ const path = require("path");
 const blogRouter = require("./routes/blog.router");
 const app = express()
 
-const PORT = 8000;
+const PORT = 3000;
 const MONGO_URL = "mongodb://localhost:27017/blog"
 
 connectDB(MONGO_URL).then(()=>console.log("Database connected")).catch((error)=>console.log("Mongo Error :",error))
@@ -19,9 +19,10 @@ app.use(cookieParser())
 app.set('view engine', 'ejs')
 app.set('views', path.resolve("./views"))
 
-app.use("/user",userRouter)
 app.use("/",staticRouter)
+app.use("/user",userRouter)
 app.use("/blog",blogRouter)
+
 
 app.listen(PORT,()=>{
     console.log(`Server started at PORT ${PORT}`)

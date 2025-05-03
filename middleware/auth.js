@@ -25,7 +25,9 @@ async function checkAuthToken(req,res,next) {
             console.log(error)
             next()
         }
-    }   
+    } else{
+        next()
+    }  
 
 }
 

@@ -1,5 +1,17 @@
 const mongoose = require("mongoose")
-const uniqid = require("uniqid")
+
+const commentSchema = new mongoose.Schema({
+    msg: {
+        type: String,
+        required: true
+    },
+    commentBy: {
+        type: mongoose.Schema.ObjectId,
+        required: true,
+        ref:"user"
+    },
+}, { timestamps: true })
+
 
 const blogSchema = new mongoose.Schema({
     title: {
@@ -12,12 +24,15 @@ const blogSchema = new mongoose.Schema({
     },
     createdBy: {
         type: mongoose.Schema.ObjectId,
-        required: true
+        required: true,
+        ref:"user"
     },
     blogId: {
         type: String,
-        required: true
-    }
+        required: true,
+        unique: true
+    },
+    comments: [commentSchema]
 }, { timestamps: true })
 
 

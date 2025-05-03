@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>
+        <% if(blog){ %>
+            <%= blog.title %>
+                <% }else{ %>
+                    <%= "not found" %>
+                        <% } %>
+    </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 text-gray-900 font-sans">
+
+    <nav class="bg-white shadow-sm sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="/" class="text-2xl font-bold text-indigo-600 hover:text-indigo-700 transition">Blogify</a>
+            <div>
+                <% if (user) { %>
+                    <span class="text-sm text-gray-700 mr-4">Welcome, <%= user.name %></span>
+                    <a href="/add-blog" class="text-sm text-gray-700 hover:cursor-pointer mx-2 py-2.5 px-4 rounded">Add blog</a>
+                    <a href="/logout"
+                      class="text-sm text-gray-700 hover:cursor-pointer mx-2 bg-red-600 text-white py-2.5 px-4 rounded">Logout</a>
+                    <% } else { %>
+                      <a href="/login" class="text-sm text-gray-700 hover:text-indigo-600 mx-2">Login</a>
+                      <a href="/signup" class="text-sm text-gray-700 hover:text-indigo-600 mx-2">Sign Up</a>
+                      <% } %>
+            </div>
+        </div>
+    </nav>
+
+    <% if(blog){ %>
+        <div class="max-w-3xl mx-auto bg-white p-8 rounded shadow-md m-6">
+            <h1 class="text-3xl font-bold mb-4">
+                <%= blog.title %>
+            </h1>
+            <div class="text-lg mb-8 whitespace-pre-line">
+                <%= blog.body %>
+            </div>
+
+            <div class="border-t pt-6">
+                <h2 class="text-2xl font-semibold mb-4">Comments</h2>
+                <% if(user){ %>
+                    <form action="blog/comment/<%= blog.blogId %>" method="POST" class="space-y-4">
+                        <textarea name="msg" rows="3" placeholder="Write your comment here..."
+                            class="w-full p-3 border rounded focus:outline-none focus:ring focus:ring-blue-300"
+                            required></textarea>
+                        <button type="submit"
+                            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                            Post Comment
+                        </button>
+                    </form>
+                    <% } %>
+                        <% if (blog.comments && blog.comments.length> 0) { %>
+                            <div class="space-y-4">
+                                <% blog.comments.forEach(function(comment) { %>
+                                    <div class="bg-white shadow rounded-lg p-4 my-4">
+                                        <div class="flex items-center mb-2">
+                                          <div class="text-sm font-medium text-gray-900"><%= comment.commentBy.name %></div>
+                                          <div class="ml-2 text-xs text-gray-500"><%= new Date(comment.createdAt).toLocaleString() %></div>
+                                        </div>
+                                        <div class="text-gray-800 text-sm mb-2 whitespace-pre-line">
+                                          <%= comment.msg %>
+                                        </div>
+                                        <% if (comment.reply && comment.reply.length > 0) { %>
+                                          <div class="ml-4 mt-2 border-l-2 border-gray-200 pl-4">
+                                            <% comment.reply.forEach(function(reply) { %>
+                                              <div class="text-sm text-gray-700 mb-1"><%= reply %></div>
+                                            <% }); %>
+                                          </div>
+                                        <% } %>
+                                      </div>
+                                      
+                                    <% }); %>
+                            </div>
+                            <% } else { %>
+                                <p class="text-gray-500 py-5">No comments yet. Be the first to comment!</p>
+                                <% } %>
+
+            </div>
+        </div>
+        <% }else{ %>
+            <p>Check the url invalid blog id</p>
+        <% } %>
+</body>
+
+</html>
