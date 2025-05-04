@@ -4,7 +4,6 @@ const uniqid = require("uniqid")
 
 async function addBlog(req, res) {
     const { title, body } = req.body;
-    console.log(title, body)
     const user = req.user
     const thumbnail = req.file ? '/uploads/' + req.file.filename : null;
 
