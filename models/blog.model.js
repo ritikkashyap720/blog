@@ -32,6 +32,10 @@ const blogSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    thumbnail:{
+        type:String,
+        required:true
+    },
     comments: [commentSchema]
 }, { timestamps: true })
 

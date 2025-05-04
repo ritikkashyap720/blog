@@ -6,21 +6,51 @@
     <title>Add Blog - Blogify</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for sticky navbar */
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+    </style>
 </head>
 
 <body class="bg-gradient-to-br from-gray-100 to-white text-gray-800 min-h-screen flex flex-col">
 
     <!-- Navbar -->
-    <nav class="bg-white shadow-sm sticky top-0 z-10">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-            <a href="/" class="text-2xl font-bold text-indigo-600 hover:text-indigo-700 transition">Blogify</a>
-            <div>
+    <nav class="bg-white shadow-md sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col">
+            <div class="flex justify-between w-full">
+                <a href="/" class="text-2xl font-semibold text-indigo-600 hover:text-indigo-700 transition">Blogify</a>
+                <div class="md:hidden">
+                    <button id="menu-toggle" class="text-gray-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="hidden md:flex space-x-4 items-center">
+                    <% if (user) { %>
+                        <span class="text-sm text-gray-700 mr-4">Welcome, <%= user.name %></span>
+                        <a href="/logout"
+                            class="text-sm text-white bg-red-600 hover:bg-red-700 px-4 py-2 rounded w-fit">Logout</a>
+                        <% } else { %>
+                            <a href="/login" class="text-sm text-indigo-600 hover:text-indigo-700">Login</a>
+                            <a href="/signup" class="text-sm text-indigo-600 hover:text-indigo-700">Sign Up</a>
+                            <% } %>
+                </div>
+            </div>
+            <div id="menu" class="hidden md:hidden flex flex-col mt-2 gap-2.5 ">
                 <% if (user) { %>
+                    <span class="text-sm text-gray-700 mr-4">Welcome, <%= user.name %></span>
                     <a href="/logout"
-                        class="text-sm text-gray-700 hover:cursor-pointer mx-2 bg-red-600 text-white py-2.5 px-4 rounded">Logout</a>
+                        class="text-sm text-white bg-red-600 hover:bg-red-700 px-4 py-2 rounded w-fit">Logout</a>
                     <% } else { %>
-                        <a href="/login" class="text-sm text-gray-700 hover:text-indigo-600 mx-2">Login</a>
-                        <a href="/signup" class="text-sm text-gray-700 hover:text-indigo-600 mx-2">Sign Up</a>
+                        <a href="/login" class="text-sm text-indigo-600 hover:text-indigo-700">Login</a>
+                        <a href="/signup" class="text-sm text-indigo-600 hover:text-indigo-700">Sign Up</a>
                         <% } %>
             </div>
         </div>
@@ -32,7 +62,7 @@
             <div class="bg-white shadow-md rounded-lg p-8">
                 <h1 class="text-3xl font-bold text-center text-indigo-700 mb-8">Create a New Blog Post</h1>
 
-                <form action="/blog/addBlog" method="POST" class="space-y-6">
+                <form action="/blog/addBlog" method="POST" class="space-y-6" enctype="multipart/form-data">
                     <!-- Title Field -->
                     <div>
                         <label for="title" class="block text-sm font-semibold text-gray-700 mb-1">Title</label>
@@ -47,6 +77,18 @@
                             class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition resize-none"></textarea>
                     </div>
 
+                    <!-- Thumbnail Field -->
+                    <div>
+                        <label for="thumbnail" class="block text-sm font-semibold text-gray-700 mb-1">Thumbnail</label>
+                        <input type="file" name="thumbnail" id="thumbnail"
+                            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
+                            accept="image/*">
+                    </div>
+
+                    <% if (typeof error !== 'undefined') { %>
+                        <p class="text-red-600 text-sm"><%= error %></p>
+                    <% } %>
+
                     <!-- Submit Button -->
                     <div class="text-center">
                         <button type="submit"
@@ -57,24 +99,29 @@
                 </form>
             </div>
 
-        <% if(blog){ %>
-            <div class="bg-white shadow-md rounded-lg p-6 mb-6 my-6">
-                <h2 class="text-2xl font-semibold text-gray-800 mb-2">
-                  <%= blog.title %>
-                </h2>
-                <p class="text-gray-700">
-                  <%= blog.body %>
-                </p>
-              </div>
+            <% if (blog) { %>
+                <div class="bg-white shadow-md rounded-lg p-6 mt-8">
+                    <img src="<%= blog.thumbnail %>" alt="<%= blog.title %>" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-2"><%= blog.title %></h2>
+                    <p class="text-gray-700 whitespace-pre-line"><%= blog.body %></p>
+                </div>
             <% } %>
         </section>
-
     </main>
 
     <!-- Footer -->
-    <footer class="bg-white text-center text-sm text-gray-500 py-4 border-t">
-        © 2025 Blogify. All rights reserved.
+     <!-- Footer -->
+     <footer class="bg-gray-900 text-white py-8 mt-16">
+        <div class="max-w-7xl mx-auto text-center">
+            <p>&copy; 2025 Blogify. All rights reserved.</p>
+        </div>
     </footer>
+    <script>
+        document.getElementById('menu-toggle').addEventListener('click', function () {
+            const menu = document.getElementById('menu');
+            menu.classList.toggle('hidden');
+        });
+    </script>
 </body>
 
 </html>

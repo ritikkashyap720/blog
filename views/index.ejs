@@ -3,59 +3,104 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Home - Blog App</title>
+  <title>Home - Blogify</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom styles for sticky navbar */
+    .sticky-nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+  </style>
 </head>
 
 <body class="bg-gray-100 text-gray-800">
+
   <!-- Navbar -->
-  <!-- Navbar -->
-  <nav class="bg-white shadow-md">
-    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-      <a href="/" class="text-xl font-bold text-indigo-600">Blogify</a>
-      <div>
-        <% if (user) { %>
-          <span class="text-sm text-gray-700 mr-4">Welcome, <%= user.name %></span>
-          <a href="/add-blog" class="text-sm text-gray-700 hover:cursor-pointer mx-2 py-2.5 px-4 rounded">Add blog</a>
-          <a href="/logout"
-            class="text-sm text-gray-700 hover:cursor-pointer mx-2 bg-red-600 text-white py-2.5 px-4 rounded">Logout</a>
-          <% } else { %>
-            <a href="/login" class="text-sm text-gray-700 hover:text-indigo-600 mx-2">Login</a>
-            <a href="/signup" class="text-sm text-gray-700 hover:text-indigo-600 mx-2">Sign Up</a>
-            <% } %>
-      </div>
+  <nav class="bg-white shadow-md sticky top-0 z-10">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col">
+        <div class="flex justify-between w-full">
+            <a href="/" class="text-2xl font-semibold text-indigo-600 hover:text-indigo-700 transition">Blogify</a>
+            <div class="md:hidden">
+                <button id="menu-toggle" class="text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="hidden md:flex space-x-4 items-center">
+                <% if (user) { %>
+                    <span class="text-sm text-gray-700 mr-4">Welcome, <%= user.name %></span>
+                    <a href="/add-blog" class="text-sm text-gray-700 hover:text-indigo-600">Add Blog</a>
+                    <a href="/logout"
+                        class="text-sm text-white bg-red-600 hover:bg-red-700 px-4 py-2 rounded w-fit">Logout</a>
+                    <% } else { %>
+                        <a href="/login" class="text-sm text-indigo-600 hover:text-indigo-700">Login</a>
+                        <a href="/signup" class="text-sm text-indigo-600 hover:text-indigo-700">Sign Up</a>
+                        <% } %>
+            </div>
+        </div>
+        <div id="menu" class="hidden md:hidden flex flex-col mt-2 gap-2.5 ">
+            <% if (user) { %>
+                <span class="text-sm text-gray-700 mr-4">Welcome, <%= user.name %></span>
+                <a href="/add-blog" class="text-sm text-gray-700 hover:text-indigo-600">Add Blog</a>
+                <a href="/logout"
+                    class="text-sm text-white bg-red-600 hover:bg-red-700 px-4 py-2 rounded w-fit">Logout</a>
+                <% } else { %>
+                    <a href="/login" class="text-sm text-indigo-600 hover:text-indigo-700">Login</a>
+                    <a href="/signup" class="text-sm text-indigo-600 hover:text-indigo-700">Sign Up</a>
+                    <% } %>
+        </div>
     </div>
-  </nav>
+</nav>
+
   <!-- Main Content -->
   <main class="max-w-7xl mx-auto px-4 py-10">
     <h1 class="text-3xl font-bold mb-6 text-center">Latest Blogs</h1>
-    <!-- Blog Cards -->
 
-    <% if (blogs.length> 0) { %>
-      <% blogs.forEach(function(blog) { %>
-        <a href=<%= blog.blogId %>>
-          <div class="bg-white shadow-md rounded-lg p-6 mb-6">
-
-            <h2 class="text-2xl font-semibold text-gray-800 mb-2">
-              <%= blog.title %>
-            </h2>
-            <p class="text-gray-700 whitespace-pre-line">
-              <%= blog.body %>
-            </p>
-          </div>
+    <!-- Blog Cards Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% if (blogs.length > 0) { %>
+        <% blogs.forEach(function(blog) { %>
+          <a href="<%= blog.blogId %>" class="group">
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+              <img class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" src="<%= blog.thumbnail %>" alt="<%= blog.title %>">
+              <div class="p-4">
+                <h2 class="text-xl line-clamp-1 font-semibold text-gray-800 group-hover:text-indigo-600 transition-colors duration-300 mb-2">
+                  <%= blog.title %>
+                </h2>
+                <p class="text-gray-600 line-clamp-1">
+                  <%= blog.body %>
+                </p>
+              </div>
+            </div>
           </a>
         <% }) %>
-          <% } else { %>
-            <p class="text-center text-gray-600">No blogs found.</p>
-            <% } %>
-
+      <% } else { %>
+        <p class="text-center text-gray-600 col-span-full">No blogs found.</p>
+      <% } %>
+    </div>
   </main>
 
   <!-- Footer -->
-  <footer class="bg-white text-center text-sm text-gray-500 py-4 border-t mt-10">
-    © 2025 Blogify. All rights reserved.
-  </footer>
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-8 mt-16">
+    <div class="max-w-7xl mx-auto text-center">
+        <p>&copy; 2025 Blogify. All rights reserved.</p>
+    </div>
+</footer>
+
+  <script>
+    document.getElementById('menu-toggle').addEventListener('click', function () {
+        const menu = document.getElementById('menu');
+        menu.classList.toggle('hidden');
+    });
+</script>
+
 </body>
 
 </html>
